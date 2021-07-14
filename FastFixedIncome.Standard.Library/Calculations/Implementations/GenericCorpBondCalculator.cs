@@ -34,7 +34,7 @@ namespace FastFixedIncome.Standard.Library.Calculations.Implementations
                 errorList.Add(new CalculationError() { ErrorCode = ErrorCodes.BadParValue, ErrorLevel = CalculationErrorLevel.Critical, ErrorMessage = ErrorMessages.BadParValue });
             }
 
-            if (resultRounding <= 0)
+            if (resultRounding < 0)
             {
                 errorList.Add(new CalculationError() { ErrorCode = ErrorCodes.InvalidDecimalResultRounding, ErrorLevel = CalculationErrorLevel.Critical, ErrorMessage = ErrorMessages.BadRoundingSetting });
             }
