@@ -1,6 +1,7 @@
 ﻿using System;
 using FastFixedIncome.Standard.Library.Calculations.Implementations;
 using FastFixedIncome.Standard.Library.Calculations.Interfaces;
+using FastFixedIncome.Standard.Library.Extensions;
 using FastFixedIncome.Standard.Library.Models;
 
 namespace FastFixedIncome.Standard.Console
@@ -9,7 +10,6 @@ namespace FastFixedIncome.Standard.Console
     {
         static void Main(string[] args)
         {
-            System.Console.WriteLine("Hello World!");
 
             decimal parValue = 1000;
 
@@ -24,9 +24,9 @@ namespace FastFixedIncome.Standard.Console
             IGenericCorpBondCalculator calc = new GenericCorpBondCalculator();
 
             var interest = calc.CalculateAccruedInterest(parValue, couponRate, firstPaymentDate, maturityDate,
-                requestDate, AccrualDayCount.ThirtyBy360, CouponPaymentFrequency.SemiAnnual, 1);
+                requestDate, AccrualDayCount.ThirtyBy360, CouponPaymentFrequency.SemiAnnual, 1, 2);
 
-            System.Console.WriteLine("Interest: " +  interest.AccruedInterest);
+            System.Console.WriteLine("Accrued Interest: " +  interest.AccruedInterest);
         }
     }
 }

@@ -10,6 +10,6 @@ namespace FastFixedIncome.Standard.Library.Calculations.Interfaces
     {
         GenericBondAccruedInterestResult CalculateAccruedInterest(decimal parValue, decimal couponRate,
             DateTime firstPaymentDate, DateTime maturityDate, DateTime requestDate, AccrualDayCount accrualDayCount,
-            CouponPaymentFrequency couponPaymentFrequency, int numberOfBonds);
+            CouponPaymentFrequency couponPaymentFrequency, int numberOfBonds, int resultRounding = 0);
     }
 }
