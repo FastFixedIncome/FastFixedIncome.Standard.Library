@@ -1,3 +1,5 @@
+![logo](https://shravanj.com/files/img/ffi/logo_transparent_small.png)
+
 # FastFixedIncome.Standard.Library
 A fast, free, and easy to use library for fixed income security calculations
 
