@@ -22,6 +22,12 @@ namespace FastFixedIncome.Standard.Library.Models
         Daily
     }
 
+    public enum CouponTypes
+    {
+        NonZero,
+        Zero
+    }
+
     public enum CalculationErrorLevel
     {
         Warning,

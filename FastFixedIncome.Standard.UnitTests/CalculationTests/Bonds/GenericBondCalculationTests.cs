@@ -24,7 +24,7 @@ namespace FastFixedIncome.Standard.UnitTests.CalculationTests.Bonds
 
             var requestDate = new DateTime(2013, 7, 19);
 
-            IGenericCorpBondCalculator calc = new GenericCorpBondCalculator();
+            IGenericBondCalculator calc = new GenericBondCalculator();
 
             var result = calc.CalculateAccruedInterest(parValue, couponRate, firstPaymentDate, maturityDate,
                 requestDate, AccrualDayCount.ThirtyBy360, CouponPaymentFrequency.SemiAnnual, 1);
@@ -46,12 +46,27 @@ namespace FastFixedIncome.Standard.UnitTests.CalculationTests.Bonds
 
             var requestDate = new DateTime(2013, 7, 19);
 
-            IGenericCorpBondCalculator calc = new GenericCorpBondCalculator();
+            IGenericBondCalculator calc = new GenericBondCalculator();
 
             var result = calc.CalculateAccruedInterest(parValue, couponRate, firstPaymentDate, maturityDate,
                 requestDate, AccrualDayCount.ThirtyBy360, CouponPaymentFrequency.SemiAnnual, 1, 2);
 
             result.AccruedInterest.Should().Be(7.50M);
+            result.ErrorList.Should().BeNullOrEmpty();
+        }
+
+        [Test]
+        public void Single_GenericBond_Ytm_Success_Test()
+        {
+            decimal parValue = 1000;
+            decimal currentPrice = 850;
+
+            IGenericBondCalculator calc = new GenericBondCalculator();
+
+            var result = calc.CalculateYieldToMaturity(parValue, currentPrice, 0.15M, DateTime.Today,
+                DateTime.Today.AddYears(7), CouponPaymentFrequency.Annual);
+
+            result.YieldToMaturity.Should().Be(0.1853281853281853281853281853M);
             result.ErrorList.Should().BeNullOrEmpty();
         }
     }

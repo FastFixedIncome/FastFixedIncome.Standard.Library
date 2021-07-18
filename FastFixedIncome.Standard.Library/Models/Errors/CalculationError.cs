@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿/*
+ * Fast Fixed Income Library - Calculation Error
+ * Entity for encapsulating calculation error details
+ * Date: 7/17/2021
+ * Author: Shravan Jambukesan <shravan@shravanj.com>
+ */
 
-namespace FastFixedIncome.Standard.Library.Models
+namespace FastFixedIncome.Standard.Library.Models.Errors
 {
     public class CalculationError
     {

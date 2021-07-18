@@ -21,7 +21,7 @@ namespace FastFixedIncome.Standard.Console
 
             var requestDate = new DateTime(2013, 7, 19);
 
-            IGenericCorpBondCalculator calc = new GenericCorpBondCalculator();
+            IGenericBondCalculator calc = new GenericBondCalculator();
 
             var interest = calc.CalculateAccruedInterest(parValue, couponRate, firstPaymentDate, maturityDate,
                 requestDate, AccrualDayCount.ThirtyBy360, CouponPaymentFrequency.SemiAnnual, 1, 2);

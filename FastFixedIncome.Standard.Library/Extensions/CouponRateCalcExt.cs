@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using FastFixedIncome.Standard.Library.Models;
 
+/*
+ * Fast Fixed Income Library - Coupon Rate Calculation Extensions
+ * Extension methods related to coupon rate calculations 
+ * Date: 7/17/2021
+ * Author: Shravan Jambukesan <shravan@shravanj.com>
+ */
+
 namespace FastFixedIncome.Standard.Library.Extensions
 {
     public static class CouponRateCalcExt

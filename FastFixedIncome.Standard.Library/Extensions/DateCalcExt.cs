@@ -5,11 +5,19 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using FastFixedIncome.Standard.Library.Models;
 
+/*
+ * Fast Fixed Income Library - Date Calculation Extensions
+ * Extension methods for date calculations pertaining to accrual day counts, payment dates, and more
+ * Date: 7/17/2021
+ * Author: Shravan Jambukesan <shravan@shravanj.com>
+ */
+
 namespace FastFixedIncome.Standard.Library.Extensions
 {
     public static class DateCalcExt
     {
-        public static int CalculateDaysFromLastPaymentDateTo(this DateTime lastPaymentDate, DateTime requestDate, AccrualDayCount accrualDayCount)
+        public static int CalculateDaysFromLastPaymentDateTo(this DateTime lastPaymentDate, DateTime requestDate,
+            AccrualDayCount accrualDayCount)
         {
             int numberOfDays = 0;
 
@@ -53,7 +61,8 @@ namespace FastFixedIncome.Standard.Library.Extensions
             return isForThirtyDayCount;
         }
 
-        public static bool AreRequestDatesValid(this DateTime requestDate, DateTime firstPaymentDate, DateTime maturityDate)
+        public static bool AreRequestDatesValid(this DateTime requestDate, DateTime firstPaymentDate,
+            DateTime maturityDate)
         {
             bool validDates = requestDate > firstPaymentDate && requestDate < maturityDate;
 
@@ -76,7 +85,7 @@ namespace FastFixedIncome.Standard.Library.Extensions
                     switch (couponPaymentFrequency)
                     {
                         case CouponPaymentFrequency.Annual:
-                            days = 360;
+                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, true);
                             break;
                         case CouponPaymentFrequency.SemiAnnual:
                             days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, true) /
@@ -95,17 +104,20 @@ namespace FastFixedIncome.Standard.Library.Extensions
                                    52;
                             break;
                         case CouponPaymentFrequency.Daily:
-                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, true);
+                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, true) /
+                                   360;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency), couponPaymentFrequency, null);
+                            throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency),
+                                couponPaymentFrequency, null);
                     }
+
                     break;
                 case AccrualDayCount.ActualBy365:
                     switch (couponPaymentFrequency)
                     {
                         case CouponPaymentFrequency.Annual:
-                            days = 365;
+                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, false);
                             break;
                         case CouponPaymentFrequency.SemiAnnual:
                             days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, false) /
@@ -124,18 +136,21 @@ namespace FastFixedIncome.Standard.Library.Extensions
                                    52;
                             break;
                         case CouponPaymentFrequency.Daily:
-                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, false);
+                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, false) /
+                                   365;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency), couponPaymentFrequency, null);
+                            throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency),
+                                couponPaymentFrequency, null);
                     }
+
                     break;
                 case AccrualDayCount.ThirtyBy360:
 
                     switch (couponPaymentFrequency)
                     {
                         case CouponPaymentFrequency.Annual:
-                            days = 360;
+                            days = 1;
                             break;
                         case CouponPaymentFrequency.SemiAnnual:
                             days = 180;
@@ -150,10 +165,12 @@ namespace FastFixedIncome.Standard.Library.Extensions
                             days = 52;
                             break;
                         case CouponPaymentFrequency.Daily:
-                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, true);
+                            days = CalculateNumberOfDaysBetweenPaymentMonths(startPaymentDate, endPaymentDate, true) /
+                                   360;
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency), couponPaymentFrequency, null);
+                            throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency),
+                                couponPaymentFrequency, null);
                     }
 
                     break;
@@ -174,15 +191,16 @@ namespace FastFixedIncome.Standard.Library.Extensions
 
             while (currentDate.Month <= endDate.Month)
             {
-                var numberOfDaysPerMonth = useThirtyDayCount ? 30 : DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
+                var numberOfDaysPerMonth =
+                    useThirtyDayCount ? 30 : DateTime.DaysInMonth(currentDate.Year, currentDate.Month);
 
                 int daysRemainingInCurrentMonth = 0;
 
                 if (currentDate.Month == startDate.Month)
                 {
-                    daysRemainingInCurrentMonth =  numberOfDaysPerMonth - currentDate.Day;
+                    daysRemainingInCurrentMonth = numberOfDaysPerMonth - currentDate.Day;
                 }
-                else if(currentDate.Month == endDate.Month)
+                else if (currentDate.Month == endDate.Month)
                 {
                     daysRemainingInCurrentMonth = endDate.Day;
                 }
@@ -214,6 +232,37 @@ namespace FastFixedIncome.Standard.Library.Extensions
             }
 
             return dates;
+        }
+
+        public static int GetCouponPaymentFreqency(this CouponPaymentFrequency couponPaymentFrequency)
+        {
+            int paymentFrequency = 0;
+
+            switch (couponPaymentFrequency)
+            {
+                case CouponPaymentFrequency.Annual:
+                    paymentFrequency = 1;
+                    break;
+                case CouponPaymentFrequency.SemiAnnual:
+                    paymentFrequency = 2;
+                    break;
+                case CouponPaymentFrequency.Quarterly:
+                    paymentFrequency = 4;
+                    break;
+                case CouponPaymentFrequency.Monthly:
+                    paymentFrequency = 12;
+                    break;
+                case CouponPaymentFrequency.Weekly:
+                    paymentFrequency = 52;
+                    break;
+                case CouponPaymentFrequency.Daily:
+                    paymentFrequency = 365;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(couponPaymentFrequency), couponPaymentFrequency, null);
+            }
+
+            return paymentFrequency;
         }
     }
 }
